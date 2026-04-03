@@ -1,0 +1,174 @@
+<Window x:Class="FileActivityNotifier.UI.Dashboard.DashboardWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="using:Microsoft.UI.Xaml.Controls"
+        xmlns:media="using:Microsoft.UI.Xaml.Media"
+        xmlns:animations="using:Microsoft.UI.Xaml.Media.Animation"
+        xmlns:primitives="using:Microsoft.UI.Xaml.Controls.Primitives"
+        Title="Noti-Files">
+
+    <Grid x:Name="DashboardRoot" UseLayoutRounding="True">
+        <Grid.Background>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                <GradientStop Color="#FF0D1426" Offset="0" />
+                <GradientStop Color="#FF111B31" Offset="0.5" />
+                <GradientStop Color="#FF17233D" Offset="1" />
+            </LinearGradientBrush>
+        </Grid.Background>
+
+        <NavigationView x:Name="RootNavView"
+                        PaneDisplayMode="Left"
+                        AlwaysShowHeader="True"
+                        IsBackButtonVisible="Collapsed"
+                        IsSettingsVisible="False"
+                        IsPaneToggleButtonVisible="False"
+                        CompactPaneLength="56"
+                        OpenPaneLength="146"
+                        SelectionChanged="NavView_SelectionChanged">
+            <NavigationView.MenuItems>
+                <NavigationViewItem x:Name="ActivityNavItem"
+                                    Content="Activity"
+                                    Tag="activity">
+                    <NavigationViewItem.Icon>
+                        <FontIcon Glyph="&#xE8EC;"
+                                  FontFamily="Segoe Fluent Icons" />
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+            </NavigationView.MenuItems>
+
+            <NavigationView.FooterMenuItems>
+                <NavigationViewItem x:Name="SettingsNavItem"
+                                    Content=""
+                                    ToolTipService.ToolTip="Settings"
+                                    Tag="settings">
+                    <NavigationViewItem.Icon>
+                        <FontIcon Glyph="&#xE713;"
+                                  FontFamily="Segoe Fluent Icons" />
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+            </NavigationView.FooterMenuItems>
+
+            <NavigationView.Header>
+                <Grid x:Name="DashboardHeader" Margin="-4,0,8,6">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="8" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="8" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="10" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <Border Grid.Column="0"
+                            Padding="10,8"
+                            CornerRadius="10"
+                            Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                            BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                            BorderThickness="1">
+                        <StackPanel>
+                            <TextBlock Text="Renamed"
+                                       FontFamily="Segoe UI Variable Display"
+                                       FontSize="12"
+                                       Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
+                            <TextBlock Text="{Binding RenamedToday}"
+                                       FontFamily="Segoe UI Variable Display"
+                                       FontSize="22"
+                                       FontWeight="SemiBold"
+                                       Foreground="{ThemeResource TextFillColorPrimaryBrush}" />
+                        </StackPanel>
+                    </Border>
+
+                    <Border Grid.Column="2"
+                            Padding="10,8"
+                            CornerRadius="10"
+                            Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                            BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                            BorderThickness="1">
+                        <StackPanel>
+                            <TextBlock Text="Moved"
+                                       FontFamily="Segoe UI Variable Display"
+                                       FontSize="12"
+                                       Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
+                            <TextBlock Text="{Binding MovedToday}"
+                                       FontFamily="Segoe UI Variable Display"
+                                       FontSize="22"
+                                       FontWeight="SemiBold"
+                                       Foreground="{ThemeResource TextFillColorPrimaryBrush}" />
+                        </StackPanel>
+                    </Border>
+
+                    <Border Grid.Column="4"
+                            Padding="10,8"
+                            CornerRadius="10"
+                            Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                            BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                            BorderThickness="1">
+                        <StackPanel>
+                            <TextBlock Text="Downloaded"
+                                       FontFamily="Segoe UI Variable Display"
+                                       FontSize="12"
+                                       Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
+                            <TextBlock Text="{Binding DownloadedToday}"
+                                       FontFamily="Segoe UI Variable Display"
+                                       FontSize="22"
+                                       FontWeight="SemiBold"
+                                       Foreground="{ThemeResource TextFillColorPrimaryBrush}" />
+                        </StackPanel>
+                    </Border>
+
+                    <ToggleButton Grid.Column="6"
+                                  x:Name="PauseResumeToggle"
+                                  Width="146"
+                                  VerticalAlignment="Center"
+                                  MinHeight="38"
+                                  Padding="12,0"
+                                  Foreground="White"
+                                  BorderThickness="0"
+                                  Background="#FF2B6DEB"
+                                  CornerRadius="10"
+                                  Checked="PauseResumeToggle_Checked"
+                                  Unchecked="PauseResumeToggle_Unchecked"
+                                  PointerEntered="PauseResumeToggle_PointerEntered"
+                                  PointerExited="PauseResumeToggle_PointerExited"
+                                  PointerPressed="PauseResumeToggle_PointerPressed"
+                                  PointerReleased="PauseResumeToggle_PointerReleased">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <FontIcon x:Name="PauseResumeIcon"
+                                      FontFamily="Segoe Fluent Icons"
+                                      Glyph="&#xE769;"
+                                      FontSize="14" />
+                            <TextBlock x:Name="PauseResumeLabel"
+                                       Text="Pause"
+                                       FontFamily="Segoe UI Variable Text" />
+                        </StackPanel>
+                    </ToggleButton>
+                </Grid>
+            </NavigationView.Header>
+
+            <Grid Margin="0,0,8,8">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition x:Name="ContentTopSpacerRow" Height="10" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <InfoBar x:Name="MonitoringInfoBar"
+                         Grid.Row="0"
+                         IsOpen="True"
+                         Severity="Success"
+                         Title="Monitoring Active"
+                         Message="File activity watcher is running." />
+
+                <Border Grid.Row="2"
+                    x:Name="ContentHost"
+                        CornerRadius="10"
+                        Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                        BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                        BorderThickness="1">
+                    <Frame x:Name="ContentFrame" Margin="6" />
+                </Border>
+            </Grid>
+        </NavigationView>
+    </Grid>
+</Window>

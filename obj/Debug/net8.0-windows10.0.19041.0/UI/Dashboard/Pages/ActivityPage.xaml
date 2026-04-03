@@ -1,0 +1,172 @@
+﻿<Page x:Class="FileActivityNotifier.UI.Dashboard.Pages.ActivityPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:controls="using:Microsoft.UI.Xaml.Controls"
+            xmlns:conv="using:FileActivityNotifier.UI.Converters"
+      xmlns:media="using:Microsoft.UI.Xaml.Media"
+      xmlns:animations="using:Microsoft.UI.Xaml.Media.Animation"
+      xmlns:primitives="using:Microsoft.UI.Xaml.Controls.Primitives"
+      Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+        <Page.Resources>
+                <conv:FileTypeToIconConverter x:Key="FileTypeToIconConverter" />
+                <conv:DateTimeToAgoConverter x:Key="DateTimeToAgoConverter" />
+        </Page.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="12" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="10" />
+                <ColumnDefinition Width="170" />
+                <ColumnDefinition Width="10" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <TextBox x:ConnectionId='5' x:Name="SearchBox"
+                     Header="Search"
+                     PlaceholderText="Search by filename or path"
+                                                         />
+
+            <ComboBox x:ConnectionId='6' x:Name="FilterComboBox"
+                      Grid.Column="2"
+                      Header="Filter"
+                      SelectedIndex="0"
+                                                                        >
+                <x:String>All</x:String>
+                <x:String>Renamed</x:String>
+                <x:String>Moved</x:String>
+                <x:String>Downloaded</x:String>
+                <x:String>Today</x:String>
+                <x:String>This Week</x:String>
+            </ComboBox>
+
+            <Button x:ConnectionId='7' Grid.Column="4"
+                    VerticalAlignment="Bottom"
+                    Content="Clear Log"
+                                                 />
+        </Grid>
+
+        <Border Grid.Row="2"
+                CornerRadius="10"
+                Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                BorderThickness="1">
+            <Grid>
+                <ScrollViewer Margin="8"
+                              VerticalScrollBarVisibility="Auto"
+                              HorizontalScrollBarVisibility="Disabled">
+                    <controls:ItemsRepeater x:ConnectionId='3' x:Name="EventsRepeater"
+                                            ItemsSource="{Binding FilteredEvents}">
+                        <controls:ItemsRepeater.Layout>
+                            <controls:StackLayout Spacing="8" />
+                        </controls:ItemsRepeater.Layout>
+
+                        <controls:ItemsRepeater.ItemTemplate>
+                            <DataTemplate>
+                                <Border Padding="10"
+                                        CornerRadius="8"
+                                        Background="{ThemeResource CardBackgroundFillColorSecondaryBrush}"
+                                        BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                                        BorderThickness="1">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="40" />
+                                            <ColumnDefinition Width="10" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+
+                                        <Border Grid.Column="0"
+                                                Width="34"
+                                                Height="34"
+                                                CornerRadius="8"
+                                                Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                                                BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                                                BorderThickness="1">
+                                            <Image Width="22"
+                                                   Height="22"
+                                                   HorizontalAlignment="Center"
+                                                   VerticalAlignment="Center"
+                                                  Source="{Binding FileExtension, Converter={StaticResource FileTypeToIconConverter}}" />
+                                        </Border>
+
+                                        <StackPanel Grid.Column="2" Spacing="4">
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*" />
+                                                    <ColumnDefinition Width="Auto" />
+                                                </Grid.ColumnDefinitions>
+
+                                                <TextBlock Text="{Binding FileName}"
+                                                           FontFamily="Segoe UI Variable Display"
+                                                           FontSize="14"
+                                                           FontWeight="SemiBold"
+                                                           TextTrimming="CharacterEllipsis"
+                                                           Foreground="{ThemeResource TextFillColorPrimaryBrush}" />
+
+                                                <Border Grid.Column="1"
+                                                        Margin="8,0,0,0"
+                                                        Padding="8,2"
+                                                        CornerRadius="10"
+                                                        Background="{Binding EventBadgeBackground}"
+                                                        BorderBrush="{Binding EventBadgeForeground}"
+                                                        BorderThickness="1">
+                                                    <TextBlock Text="{Binding EventType}"
+                                                               FontFamily="Segoe UI Variable Text"
+                                                               FontSize="10"
+                                                               FontWeight="SemiBold"
+                                                               Foreground="{Binding EventBadgeForeground}" />
+                                                </Border>
+                                            </Grid>
+
+                                            <TextBlock Text="{Binding FilePath}"
+                                                       FontFamily="Cascadia Mono"
+                                                       FontSize="11"
+                                                       TextTrimming="CharacterEllipsis"
+                                                       Foreground="{ThemeResource TextFillColorTertiaryBrush}" />
+
+                                            <StackPanel Orientation="Horizontal" Spacing="6">
+                                                <FontIcon FontFamily="Segoe Fluent Icons"
+                                                          Glyph="&#xE823;"
+                                                          FontSize="11"
+                                                          Foreground="{ThemeResource TextFillColorTertiaryBrush}" />
+                                                <TextBlock Text="{Binding Timestamp, Converter={StaticResource DateTimeToAgoConverter}}"
+                                                           FontFamily="Cascadia Mono"
+                                                           FontSize="10"
+                                                           Foreground="{ThemeResource TextFillColorTertiaryBrush}" />
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </controls:ItemsRepeater.ItemTemplate>
+                    </controls:ItemsRepeater>
+                </ScrollViewer>
+
+                <StackPanel x:ConnectionId='2' x:Name="EmptyStatePanel"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Visibility="Collapsed">
+                    <TextBlock Text="No activity yet"
+                               FontFamily="Segoe UI Variable Display"
+                               FontSize="16"
+                               FontWeight="SemiBold"
+                               HorizontalAlignment="Center"
+                               Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
+                    <TextBlock Margin="0,6,0,0"
+                               Text="Start monitoring files to populate this feed."
+                               FontFamily="Segoe UI Variable Text"
+                               HorizontalAlignment="Center"
+                               Foreground="{ThemeResource TextFillColorTertiaryBrush}" />
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Grid>
+</Page>
+

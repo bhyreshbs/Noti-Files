@@ -1,0 +1,7 @@
+App.xbf
+Resources\Themes\DarkTheme.xbf
+Resources\Themes\LightTheme.xbf
+UI\Dashboard\DashboardWindow.xbf
+UI\Dashboard\Pages\ActivityPage.xbf
+UI\Dashboard\Pages\SettingsPage.xbf
+UI\Toast\ToastWindow.xbf
